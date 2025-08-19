@@ -2,8 +2,15 @@ import express from "express"
 
 const app = express()
 
-app.get("/", (req, res) => {
-  res.send("Hello World!")
+app.get("/", async (req, res) => {
+  const cacheKey = "featured-categories"
+  const featuredCategories = await prisma.category.findMany({
+    where: {
+      isFeatured: true,
+    },
+  })
+
+  res.json(featuredCategories)
 })
 
 app.listen(3000, () => {
